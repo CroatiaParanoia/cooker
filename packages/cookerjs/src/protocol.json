@@ -1,0 +1,28 @@
+{
+  "name": "Row",
+  "children": [
+    {
+      "name": "Col",
+      "children": [
+        {
+          "name": "Input",
+          "input": {
+            "value": 123,
+            "placeholder": "请输入"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Col",
+      "children": [
+        {
+          "name": "Text",
+          "input": {
+            "content": "这是一段话"
+          }
+        }
+      ]
+    }
+  ]
+}

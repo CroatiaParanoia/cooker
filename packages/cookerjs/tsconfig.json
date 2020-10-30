@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "module": "ES2015",
-    "declaration": true,
-    "declarationDir": "types",
-    "outDir": "build",
+    "target": "ES5",
     "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "lib": ["DOM", "esnext"],
+    "declaration": true,
+    "declarationMap": false,
+    "outDir": "dist",
+    "typeRoots": ["./src/types/**.ts"],
+    "declarationDir": "types",
+    "esModuleInterop": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "build", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "build", "lib", "**/*.test.ts"]
 }
