@@ -22,5 +22,11 @@ export default {
       file: "lib/main.esm.js",
       sourcemap: true,
     },
+    {
+      name: 'cookerjs',
+      format: "umd",
+      file: "lib/main.umd.js",
+      sourcemap: true,
+    },
   ],
 };

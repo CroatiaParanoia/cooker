@@ -11,40 +11,65 @@ const template = {
   version: "1",
   content: [
     {
-      name: "Row",
-      children: [
-        {
-          name: "Col",
-          children: [
-            {
-              name: "Input",
-              input: {
-                value: { $input: "textValue" },
-                placeholder: "请输入",
-              },
-            },
-          ],
-        },
-        {
-          name: "Col",
-          children: [
-            {
-              name: "Text",
-              input: {
-                content: "这是一段话",
-              },
-            },
-          ],
-        },
-      ],
+      name: "Input",
+      input: {
+        value: { $input: "textValue" },
+        placeholder: "请输入",
+      },
+      output: {
+        $output: "textValue",
+      },
+    },
+    {
+      name: "Text",
+      input: {
+        content: { $input: "textValue" },
+      },
     },
   ],
 };
 
+// const template = {
+//   version: "1",
+//   content: [
+//     {
+//       name: "Row",
+//       children: [
+//         {
+//           name: "Col",
+//           children: [
+//             {
+//               name: "Input",
+//               input: {
+//                 value: { $input: "textValue" },
+//                 placeholder: "请输入",
+//               },
+//             },
+//           ],
+//         },
+//         {
+//           name: "Col",
+//           children: [
+//             {
+//               name: "Text",
+//               input: {
+//                 content: "这是一段话",
+//               },
+//             },
+//           ],
+//         },
+//       ],
+//     },
+//   ],
+// };
+
 function App() {
+  const handleChange = React.useCallback((value) => {
+    console.log(value, "value changed");
+  }, []);
   return (
     <div>
-      <RootRC value={value} template={template} components={{}} />
+      <RootRC value={value} template={template} onChange={handleChange} />
     </div>
   );
 }

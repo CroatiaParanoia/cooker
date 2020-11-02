@@ -9,6 +9,8 @@ namespace Protocol {
     $store: string;
   }
 
+  export type DynamicField = DynamicInput | DynamicOutput | DynamicStore;
+
   export interface Component {
     name: string;
     input: Record<string, any | DynamicInput>;
