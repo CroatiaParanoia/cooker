@@ -1,32 +1,9 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import cookerjs from "cookerjs";
-import RootRC from "./RootRC";
+import CookerRoot from "./RootRC";
 
-const value = {
+const dataSource = {
   textValue: "这是默认的值",
-};
-
-const template = {
-  version: "1",
-  content: [
-    {
-      name: "Input",
-      input: {
-        value: { $input: "textValue" },
-        placeholder: "请输入",
-      },
-      output: {
-        $output: "textValue",
-      },
-    },
-    {
-      name: "Text",
-      input: {
-        content: { $input: "textValue" },
-      },
-    },
-  ],
 };
 
 // const template = {
@@ -63,13 +40,95 @@ const template = {
 //   ],
 // };
 
+const Input: React.FC<any> = ({
+  setOutput,
+  input: { placeholder, value = "" },
+}) => {
+  return (
+    <input
+      type="text"
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => setOutput(e.target.value)}
+    />
+  );
+};
+const Text: React.FC<any> = ({ input: { content } }) => {
+  return <span>{content}</span>;
+};
+
+const Calc: React.FC<any> = ({ input: { num1 = 0, num2 = 0 } }) => {
+  return <span>{num1 * num2}</span>;
+};
+
+const components = {
+  Input,
+  Text,
+  Calc,
+};
+const template: Protocol.Main = {
+  version: "1",
+  content: [
+    {
+      name: "Input",
+      input: {
+        value: { $input: "num1" },
+        placeholder: "number1",
+      },
+      output: {
+        $output: "num1",
+      },
+    },
+    {
+      name: "Text",
+      input: {
+        content: "*",
+      },
+    },
+    {
+      name: "Input",
+      input: {
+        value: { $input: "num2" },
+        placeholder: "number2",
+      },
+      output: {
+        $output: "num2",
+      },
+    },
+    {
+      name: "Text",
+      input: {
+        content: "=",
+      },
+    },
+    {
+      name: "Calc",
+      input: {
+        num1: { $input: "num1" },
+        num2: { $input: "num2" },
+      },
+    },
+  ],
+};
+
 function App() {
-  const handleChange = React.useCallback((value) => {
-    console.log(value, "value changed");
-  }, []);
+  const [value, setValue] = React.useState({});
+
+  const handleChange = React.useCallback(
+    (value) => {
+      console.log(value, "value");
+      setValue(value);
+    },
+    [setValue]
+  );
   return (
     <div>
-      <RootRC value={value} template={template} onChange={handleChange} />
+      <CookerRoot
+        value={value}
+        template={template}
+        onChange={handleChange}
+        components={components}
+      />
     </div>
   );
 }

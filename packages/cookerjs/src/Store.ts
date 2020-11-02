@@ -11,8 +11,12 @@ class Store<T extends any> {
     this[STATE_KEY].next(initState);
   }
 
-  subscribe(fc: (v: T) => void, watchKeys: string[] = []) {
+  subscribe(fc: (v: T) => void, watchKeys?: string[]) {
     const subscribeTemp = (value: T) => {
+      if (!watchKeys) {
+        return fc(value);
+      }
+
       if (Array.isArray(watchKeys) && watchKeys.length) {
         const oldValueArr = watchKeys.map(
           (key) => (this[PRE_STATE_KEY] as any)[key]
@@ -26,8 +30,6 @@ class Store<T extends any> {
         if (!isSame) {
           fc(value);
         }
-      } else {
-        fc(value);
       }
     };
     return this[STATE_KEY].subscribe(subscribeTemp);
@@ -39,6 +41,8 @@ class Store<T extends any> {
 
   setValue(value: T) {
     const oldValue = this.getValue();
+    // debugger
+    if (value === oldValue) return;
     this[PRE_STATE_KEY] = oldValue;
     this[STATE_KEY].next(value);
   }

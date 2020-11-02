@@ -18,12 +18,12 @@ interface DynamicFileInfo {
 }
 
 class Node {
-  input$: Store<StateType.Input$>;
-  output$: Store<StateType.Output$>;
-  protocol$: Store<StateType.Protocol$>;
-  value$: Store<StateType.Value$>;
-  dataSource$: Store<StateType.dataSource$>;
-  store$: Store<StateType.Store$>;
+  input$: Store<StateType.Input>;
+  output$: Store<StateType.Output>;
+  protocol$: Store<StateType.Protocol>;
+  value$: Store<StateType.Value>;
+  dataSource$: Store<StateType.dataSource>;
+  store$: Store<StateType.Store>;
 
   _dynamicFiledArr: Array<DynamicFileInfo> | null = null;
 
@@ -35,9 +35,9 @@ class Node {
   constructor(
     path: string[],
     protocol$: Store<Protocol.Main>,
-    value$: Store<StateType.Value$>,
-    dataSource$: Store<StateType.dataSource$>,
-    store$: Store<StateType.Store$>
+    value$: Store<StateType.Value>,
+    dataSource$: Store<StateType.dataSource>,
+    store$: Store<StateType.Store>
   ) {
     this.path = path;
     this.protocol$ = protocol$;
@@ -47,7 +47,7 @@ class Node {
     this.value$ = value$;
 
     this.input$ = new Store({});
-    this.output$ = new Store(undefined as StateType.Output$);
+    this.output$ = new Store(undefined as StateType.Output);
 
     this.output$.subscribe((outputValue) => {
       if (!this.curTemplate || isContainer(this.curTemplate)) return;
@@ -67,7 +67,8 @@ class Node {
         }
       }
     });
-
+    const watchPublicKeys =
+      this.dynamicFieldArr?.map((v) => v.dynamicKey) ?? [];
     this.store$.subscribe(() => {
       if (!this.curTemplate || isContainer(this.curTemplate)) return;
       const { input } = this.curTemplate;
@@ -75,7 +76,7 @@ class Node {
       const realInput = this.getInput(input);
 
       this.input$.setValue(realInput);
-    });
+    }, watchPublicKeys);
 
     this.value$.subscribe(() => {
       if (!this.curTemplate || isContainer(this.curTemplate)) return;
@@ -83,7 +84,7 @@ class Node {
 
       const realInput = this.getInput(input);
       this.input$.setValue(realInput);
-    });
+    }, watchPublicKeys);
   }
 
   get dynamicFieldArr() {
@@ -137,14 +138,13 @@ class Node {
     return this._curTemplate;
   }
 
-  getInput(input: StateType.Input$) {
+  getInput(input: StateType.Input) {
     const [value, dataSource, store] = [
       this.value$,
       this.dataSource$,
       this.store$,
     ].map((v) => v.getValue());
 
-    console.log(this.curTemplate?.name, { value, dataSource, store });
     const realInput = Object.entries(input).reduce((result, [k, v]) => {
       if (isDynamicInput(v)) {
         return {
@@ -217,11 +217,11 @@ class Node {
 }
 
 class Cookerjs {
-  protocol$: Store<StateType.Protocol$>;
-  value$: Store<StateType.Value$>;
-  dataSource$: Store<StateType.dataSource$>;
+  protocol$: Store<StateType.Protocol>;
+  value$: Store<StateType.Value>;
+  dataSource$: Store<StateType.dataSource>;
 
-  store$: Store<StateType.Store$>;
+  store$: Store<StateType.Store>;
 
   _children: Node[] | null = null;
 
@@ -258,5 +258,6 @@ class Cookerjs {
 export default Cookerjs;
 
 export type Template = Protocol.Main;
-
-export { isContainer, Node };
+export type DataSource = StateType.dataSource;
+export type { Node };
+export { isContainer };

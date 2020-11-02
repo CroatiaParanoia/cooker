@@ -4,43 +4,39 @@ import { Template, isContainer } from "cookerjs";
 import Component from "./Component";
 import Container from "./Container";
 import ctx from "./context";
+import useEventCallback from "./../hooks/useEventCallback";
 
 interface RootProps {
   value: Record<string, any>;
   onChange?: (newValue: RootProps["value"]) => void;
   template: Template;
-  components: Record<string, React.FC>;
+  dataSource?: Record<string, any>;
+  components?: Record<string, React.FC<any>>;
 }
 
-const Input: React.FC<any> = ({ setOutput, input: { placeholder, value = '' } }) => {
-  return (
-    <input
-      type="text"
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => setOutput(e.target.value)}
-    />
-  );
-};
-const Text: React.FC<any> = ({ input: { content } }) => {
-  console.log(content, "content");
-  return <span>{content}</span>;
-};
+const noopFn = () => {};
 
 const RootRC: React.FC<RootProps> = ({
   value,
   template,
-  components = { Input, Text },
-  onChange,
+  components = {},
+  onChange = noopFn,
 }) => {
+  const handleChange = useEventCallback(onChange, []);
+
   const cooker = useMemo(() => {
-    const v = new Cooker(template, {}, value);
+    const v = new Cooker(template, {}, {});
 
     v.subscribe((value) => {
-      onChange?.(value);
+      handleChange(value);
     });
+
     return v;
-  }, [template, value, onChange]);
+  }, [template, handleChange]);
+
+  useEffect(() => {
+    cooker.value$.setValue(value);
+  }, [value, cooker]);
 
   const renderNodes = useCallback((nodes: Node[]) => {
     return nodes.map((item) => {
@@ -60,7 +56,7 @@ const RootRC: React.FC<RootProps> = ({
   }, []);
 
   return (
-    <ctx.Provider value={{ components: { Input, Text } }}>
+    <ctx.Provider value={{ components }}>
       {renderNodes(cooker.children)}
     </ctx.Provider>
   );

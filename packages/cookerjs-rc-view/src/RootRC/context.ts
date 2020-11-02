@@ -1,7 +1,7 @@
 import React from "react";
 
 const ctx = React.createContext({
-  components: {},
+  components: {} as Record<string, React.FC<any>>,
 });
 
-export default ctx
+export default ctx;

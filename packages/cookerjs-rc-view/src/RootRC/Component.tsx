@@ -33,8 +33,6 @@ const Component: React.FC<{ root: Node }> = ({ root }) => {
 
   const input = root.input$.getValue();
 
-  console.log(input, "input");
-
   return React.createElement(currentComponent, {
     setOutput: handleOutputChange,
     input,

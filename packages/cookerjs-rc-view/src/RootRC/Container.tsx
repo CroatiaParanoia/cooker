@@ -6,7 +6,6 @@ const Component: React.FC<{ root: Node }> = ({ children, root }) => {
   const { components } = React.useContext(ctx);
 
   const currentComponent = (components as any)[root.curTemplate?.name ?? ""];
-  console.log(currentComponent, root.curTemplate, "currentComponent");
   const setOutput = useCallback(
     (output) => {
       root.setOutput(output);

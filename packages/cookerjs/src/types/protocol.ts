@@ -14,7 +14,7 @@ namespace Protocol {
   export interface Component {
     name: string;
     input: Record<string, any | DynamicInput>;
-    output: any | DynamicOutput;
+    output?: any | DynamicOutput;
   }
 
   export interface Container {
@@ -31,6 +31,6 @@ namespace Protocol {
     title?: string;
     description?: string;
     version: string;
-    content: Container[];
+    content: Array<Container | Component>;
   }
 }

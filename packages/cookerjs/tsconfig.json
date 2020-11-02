@@ -9,7 +9,7 @@
     "outDir": "dist",
     "typeRoots": ["./src/types/**.ts"],
     "declarationDir": "types",
-    "esModuleInterop": true
+    "esModuleInterop": false,
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "build", "lib", "**/*.test.ts"]
