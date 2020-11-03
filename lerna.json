@@ -1,5 +1,5 @@
 {
-  "packages": ["packages/*"],
+  "packages": ["packages/cookerjs", "packages/cookerjs-react"],
   "version": "0.0.0",
   "command": {
     "bootstrap": {
