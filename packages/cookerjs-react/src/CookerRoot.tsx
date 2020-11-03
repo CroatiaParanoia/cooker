@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
-import Cooker, { Node } from "cookerjs";
-import { Template, isContainer } from "cookerjs";
+import Cooker, { Node, Template, isContainer } from "cookerjs";
 import Component from "./Component";
 import Container from "./Container";
 import ctx from "./context";

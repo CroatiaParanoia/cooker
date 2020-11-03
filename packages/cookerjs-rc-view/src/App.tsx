@@ -108,23 +108,17 @@ const template: Protocol.Main = {
 };
 
 function App() {
-  const [value, setValue] = React.useState({});
+  // const [value, setValue] = React.useState({});
 
-  const handleChange = React.useCallback(
-    (value) => {
-      console.log(value, "value");
-      setValue(value);
-    },
-    [setValue]
-  );
+  // const handleChange = React.useCallback(
+  //   (value) => {
+  //     setValue(value);
+  //   },
+  //   [setValue]
+  // );
   return (
     <div>
-      <CookerRoot
-        value={value}
-        template={template}
-        onChange={handleChange}
-        components={components}
-      />
+      <CookerRoot value={{}} template={template} components={components} />
     </div>
   );
 }
