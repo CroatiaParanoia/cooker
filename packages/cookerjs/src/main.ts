@@ -49,42 +49,70 @@ class Node {
     this.input$ = new Store({});
     this.output$ = new Store(undefined as StateType.Output);
 
-    this.output$.subscribe((outputValue) => {
-      if (!this.curTemplate || isContainer(this.curTemplate)) return;
-      const { output } = this.curTemplate;
+    this.updateInput();
 
-      if (isDynamicOutput(output)) {
-        const curValue = this.value$.getValue();
-        if (curValue[output.$output] !== outputValue) {
-          this.value$.setValue({ ...curValue, [output.$output]: outputValue });
-        }
-      }
+    this.output$.subscribe(
+      this.hasCurTemplate((curTemplate, outputValue) => {
+        if (isContainer(curTemplate)) return;
+        const { output } = curTemplate;
 
-      if (isDynamicStore(output)) {
-        const curStore = this.store$.getValue();
-        if (curStore[output.$store] !== outputValue) {
-          this.store$.setValue({ ...curStore, [output.$store]: outputValue });
+        if (isDynamicOutput(output)) {
+          this.updateValue(output.$output, outputValue);
         }
-      }
-    });
+
+        if (isDynamicStore(output)) {
+          this.updateStore(output.$store, outputValue);
+        }
+      })
+    );
+
     const watchPublicKeys =
       this.dynamicFieldArr?.map((v) => v.dynamicKey) ?? [];
+
     this.store$.subscribe(() => {
-      if (!this.curTemplate || isContainer(this.curTemplate)) return;
-      const { input } = this.curTemplate;
-
-      const realInput = this.getInput(input);
-
-      this.input$.setValue(realInput);
+      this.updateInput();
     }, watchPublicKeys);
 
     this.value$.subscribe(() => {
-      if (!this.curTemplate || isContainer(this.curTemplate)) return;
-      const { input } = this.curTemplate;
+      this.updateInput();
+    }, watchPublicKeys);
+  }
+
+  hasCurTemplate<T>(
+    fn: (
+      curTemplate: Protocol.Component | Protocol.Container,
+      value?: T
+    ) => void
+  ) {
+    if (!this.curTemplate || isContainer(this.curTemplate)) return () => {};
+    return (value?: T) => {
+      fn(this.curTemplate!, value);
+    };
+  }
+
+  updateInput() {
+    this.hasCurTemplate((curTemplate) => {
+      if (isContainer(curTemplate)) return;
+      const { input } = curTemplate;
 
       const realInput = this.getInput(input);
+
       this.input$.setValue(realInput);
-    }, watchPublicKeys);
+    })();
+  }
+
+  updateStore(key: string, value: StateType.Output) {
+    const curStore = this.store$.getValue();
+    if (curStore[key] !== value) {
+      this.store$.setValue({ ...curStore, [key]: value });
+    }
+  }
+
+  updateValue(key: string, value: StateType.Output) {
+    const curValue = this.value$.getValue();
+    if (curValue[key] !== value) {
+      this.value$.setValue({ ...curValue, [key]: value });
+    }
   }
 
   get dynamicFieldArr() {
@@ -144,7 +172,7 @@ class Node {
       this.dataSource$,
       this.store$,
     ].map((v) => v.getValue());
-
+    console.log(this.curTemplate, "curTemplate");
     const realInput = Object.entries(input).reduce((result, [k, v]) => {
       if (isDynamicInput(v)) {
         return {
@@ -165,6 +193,7 @@ class Node {
         [k]: v,
       };
     }, {} as Record<string, any>);
+    console.log(realInput, "realInput");
     return realInput;
   }
 
