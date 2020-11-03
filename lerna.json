@@ -1,13 +1,21 @@
 {
-  "packages": ["packages/cookerjs", "packages/cookerjs-react"],
-  "version": "0.0.0",
+  "packages": [
+    "packages/cookerjs",
+    "packages/cookerjs-react"
+  ],
+  "version": "1.1.0",
   "command": {
     "bootstrap": {
       "hoist": true,
-      "npmClientArgs": ["--no-package-lock", "--no-ci"]
+      "npmClientArgs": [
+        "--no-package-lock",
+        "--no-ci"
+      ]
     },
     "version": {
-      "allowBranch": ["master"],
+      "allowBranch": [
+        "master"
+      ],
       "amend": false,
       "conventionalCommits": true
     },
