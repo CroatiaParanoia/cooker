@@ -1,3 +1,4 @@
+// @ts-ignore
 import { BehaviorSubject } from "rxjs";
 
 const STATE_KEY = Symbol("state");
@@ -36,7 +37,7 @@ class Store<T extends any> {
   }
 
   getValue() {
-    return this[STATE_KEY].getValue();
+    return this[STATE_KEY].getValue() as T;
   }
 
   setValue(value: T) {

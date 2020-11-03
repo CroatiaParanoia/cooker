@@ -167,12 +167,7 @@ class Node {
   }
 
   getInput(input: StateType.Input) {
-    const [value, dataSource, store] = [
-      this.value$,
-      this.dataSource$,
-      this.store$,
-    ].map((v) => v.getValue());
-    console.log(this.curTemplate, "curTemplate");
+    const [value, store] = [this.value$, this.store$].map((v) => v.getValue());
     const realInput = Object.entries(input).reduce((result, [k, v]) => {
       if (isDynamicInput(v)) {
         return {
@@ -193,7 +188,6 @@ class Node {
         [k]: v,
       };
     }, {} as Record<string, any>);
-    console.log(realInput, "realInput");
     return realInput;
   }
 

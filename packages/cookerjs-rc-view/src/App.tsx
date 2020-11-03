@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
-import CookerRoot from "./RootRC";
-
-const dataSource = {
-  textValue: "这是默认的值",
-};
+import CookerRoot from "cookerjs-react";
 
 // const template = {
 //   version: "1",
